@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-GynacareApplication<gynacare>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "io.gynacare.gynacare.GynacareApplication",
+            "projectName": "gynacare",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
