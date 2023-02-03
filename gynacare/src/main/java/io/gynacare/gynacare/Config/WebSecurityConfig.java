@@ -2,6 +2,7 @@ package io.gynacare.gynacare.Config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -33,13 +34,13 @@ public class WebSecurityConfig{
 	private JwtRequestFilter jwtRequestFilter;
 
     
-	@Autowired
-	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-		// configure AuthenticationManager so that it knows from where to load
-		// user for matching credentials
-		// Use BCryptPasswordEncoder
-		auth.userDetailsService(jwtUserDetailsService).passwordEncoder(passwordEncoder());
-	}
+	// @Autowired
+	// public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+	// 	// configure AuthenticationManager so that it knows from where to load
+	// 	// user for matching credentials
+	// 	// Use BCryptPasswordEncoder
+	// 	auth.userDetailsService(jwtUserDetailsService).passwordEncoder(passwordEncoder());
+	// }
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
@@ -54,8 +55,9 @@ public class WebSecurityConfig{
 
     
 	
+	
 	@Bean
-    protected DefaultSecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception  {
+    protected SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception  {
 		// We don't need CSRF for this example
 		// httpSecurity.csrf().disable()
 		// 		// dont authenticate this particular request
@@ -79,7 +81,8 @@ public class WebSecurityConfig{
         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and()
         .authorizeRequests((authorize) -> authorize
-                
+		
+				.antMatchers(HttpMethod.GET, "/api/v1/**").permitAll()
                 .antMatchers("/api/v1/auth/**").permitAll()
                 .antMatchers("/v2/api-docs/**").permitAll()
                 .antMatchers("/swagger-ui/**").permitAll()
