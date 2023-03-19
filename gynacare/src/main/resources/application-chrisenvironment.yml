@@ -1,0 +1,15 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+  datasource:
+    url: jdbc:mysql://192.168.0.102:3306/gynacare
+    username: gynacare
+    password: Gynacare@2023
+    driverClassName: com.mysql.cj.jdbc.Driver
+  mvc:
+    pathmatch:
+      matching-strategy: ANT_PATH_MATCHER
+jwt:
+  secret: gynacare
+

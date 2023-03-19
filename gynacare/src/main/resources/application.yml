@@ -1,0 +1,5 @@
+spring:
+  profiles:
+    active: chrisenvironment
+    #    active: rehemaenvironment
+    include: common
