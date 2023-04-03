@@ -1,17 +1,14 @@
 package io.gynacare.gynacare.security.model.entity;
 
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.sql.Date;
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.stream.Stream;
 
 @Getter
 @Setter
@@ -21,12 +18,13 @@ import java.util.Collection;
 @NoArgsConstructor
 
 @Entity
-@Table(name = "users")
+@Table(name = "APP_USER")
 public class AppUser implements UserDetails {
 
     private static final long serialVersionUID = -6031797646032425241L;
     @Id
     @GeneratedValue
+    @Column(name = "ID")
     private BigDecimal id;
 
     @Column(name = "USERNAME", unique = true)
@@ -35,33 +33,27 @@ public class AppUser implements UserDetails {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "IS_ACCOUNT_DISABLED")
-    private boolean isAccountDisabled;
+    @Column(name = "IS_ACCOUNT_ENABLED", length = 1)
+    private String isAccountEnabled;
 
     @Column(name = "EMAIL_VERIFICATION_CODE")
     private String emailVerificationCode;
 
-    @Column(name = "TOKEN")
-    private String token;
+    @Column(name = "IS_ACCOUNT_LOCKED", length = 1)
+    private String isAccountLocked;
 
-    @Version
-    @Column(name = "VERSION")
-    private Long version;
+    @Column(name = "IS_ACCOUNT_EXPIRED", length = 1)
+    private String isAccountExpired;
 
-    @CreationTimestamp
-    @Column(name = "CREATION_DATE", nullable = false)
-    private Date creationDate;
+    @Column(name = "IS_CREDENTIALS_EXPIRED", length = 1)
+    private String isCredentialsExpired;
 
-    @UpdateTimestamp
-    @Column(name = "MODIFICATION_DATE")
-    private Date modificationDate;
-
-    @ManyToMany(fetch = FetchType.EAGER)
-    private Collection<Role> roles = new ArrayList<>();
+    @Column(name = "ROLES")
+    private String roles;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).toList();
+        return Stream.of(roles.split(",")).map(SimpleGrantedAuthority::new).toList();
     }
 
     @Override
@@ -81,6 +73,6 @@ public class AppUser implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return !this.isAccountDisabled;
+        return true;
     }
 }
