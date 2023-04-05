@@ -1,2 +1,21 @@
 server:
   port: 8080
+spring:
+  flyway:
+    locations: classpath:/db/migration
+    baseline-on-migrate: false
+    validate-on-migrate: false
+    table: schema_history
+    enabled: true
+    out-of-order: true
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE
+  file:
+    name: gynacare.log
